@@ -1,7 +1,10 @@
 from datetime import datetime, timedelta
 from jose import jwt
+from dotenv import load_dotenv
 
-SECRET_KEY = "SUPER_SECRET_KEY_CHANGE_THIS"
+load_dotenv()
+
+SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
