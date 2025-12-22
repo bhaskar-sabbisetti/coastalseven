@@ -1,0 +1,30 @@
+pipeline {
+    agent any
+    environment {
+        // No Docker Hub credentials needed
+        IMAGE_NAME = "coastalseven-day6" 
+    }
+    stages {
+        stage('Build Image') {
+            steps {
+                script {
+                    // Build locally. Docker Desktop K8s will can see this image.
+                    sh "docker build -t $IMAGE_NAME:latest ."
+                }
+            }
+        }
+        // 'Login & Push' stage REMOVED because we are using local images
+        
+        stage('Deploy to K8s') {
+            steps {
+                script {
+                    // Check if a deployment exists to force an update (optional workaround for local images)
+                    // But usually, simply applying is enough if the tag changed or it's a new deploy.
+                    // For local dev with 'latest' tag, sometimes we force a restart:
+                    sh "kubectl apply -f ../k8s/"
+                    sh "kubectl rollout restart deployment/coastalseven-app"
+                }
+            }
+        }
+    }
+}
