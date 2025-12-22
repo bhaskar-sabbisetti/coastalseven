@@ -1,0 +1,32 @@
+fastapi
+uvicorn[standard]
+python-dotenv
+pydantic
+pydantic-settings
+
+# Databases
+sqlalchemy
+asyncpg
+alembic
+motor
+
+# Caching
+redis
+
+# GraphQL
+graphene
+starlette-graphene3
+
+# Messaging / Async Tasks
+aio-pika
+
+# Security
+python-jose[cryptography]
+passlib[bcrypt]
+python-multipart
+authlib
+httpx
+
+# Utilities
+email-validator
+fastapi-mail
