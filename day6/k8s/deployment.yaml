@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: coastalseven-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: coastal-api
+  template:
+    metadata:
+      labels:
+        app: coastal-api
+    spec:
+      containers:
+      - name: fastapi-container
+        # Use simple name, no username prefix
+        image: coastalseven-day6:latest 
+        # IMPORTANT: 'Never' forces K8s to look for the image locally 
+        imagePullPolicy: Never 
+        ports:
+        - containerPort: 8000
