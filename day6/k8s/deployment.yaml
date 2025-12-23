@@ -17,6 +17,19 @@ spec:
         # Use simple name, no username prefix
         image: coastalseven-day6:latest 
         # IMPORTANT: 'Never' forces K8s to look for the image locally 
-        imagePullPolicy: Never 
+        imagePullPolicy: IfNotPresent 
         ports:
         - containerPort: 8000
+        env:
+        - name: MAIL_FROM
+          value: "admin@example.com"
+        - name: MAIL_USERNAME
+          value: "admin"
+        - name: MAIL_PASSWORD
+          value: "password"
+        - name: MAIL_PORT
+          value: "587"
+        - name: MAIL_SERVER
+          value: "smtp.gmail.com"
+        - name: MAIL_FROM_NAME
+          value: "Coastalseven Admin"
