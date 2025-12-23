@@ -22,7 +22,7 @@ spec:
         - containerPort: 8000
         env:
         - name: MAIL_FROM
-          value: "admin@example.com"
+          value: "phanimahankali23@gmail.com"
         - name: MAIL_USERNAME
           value: "admin"
         - name: MAIL_PASSWORD
