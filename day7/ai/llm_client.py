@@ -1,0 +1,84 @@
+import requests
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+HF_API_KEY = os.getenv("HF_API_KEY")
+
+MODEL_NAME = "facebook/bart-large-cnn"
+PROVIDER = "huggingface"
+
+API_URL = f"https://router.huggingface.co/hf-inference/models/{MODEL_NAME}"
+
+HEADERS = {
+    "Authorization": f"Bearer {HF_API_KEY}",
+    "Content-Type": "application/json"
+}
+
+
+def generate_summary(text: str) -> dict:
+    """
+    Generate a summary for given text using an LLM.
+
+    Returns:
+        {
+            summary: str | None
+            success: bool
+            error: str | None
+            provider: str
+            model: str
+        }
+    """
+
+    if not text or len(text.strip()) < 20:
+        return {
+            "summary": None,
+            "success": False,
+            "error": "Text too short for summarization",
+            "provider": PROVIDER,
+            "model": MODEL_NAME
+        }
+
+    payload = {"inputs": text}
+
+    try:
+        response = requests.post(API_URL, headers=HEADERS, json=payload, timeout=90)
+    except requests.exceptions.RequestException as e:
+        return {
+            "summary": None,
+            "success": False,
+            "error": str(e),
+            "provider": PROVIDER,
+            "model": MODEL_NAME
+        }
+
+    if response.status_code != 200:
+        return {
+            "summary": None,
+            "success": False,
+            "error": f"HTTP {response.status_code}",
+            "provider": PROVIDER,
+            "model": MODEL_NAME
+        }
+
+    try:
+        data = response.json()
+        summary = data[0]["summary_text"]
+    except Exception:
+        return {
+            "summary": None,
+            "success": False,
+            "error": "Invalid response format",
+            "provider": PROVIDER,
+            "model": MODEL_NAME
+        }
+
+    return {
+        "summary": summary,
+        "success": True,
+        "error": None,
+        "provider": PROVIDER,
+        "model": MODEL_NAME
+    }
+
