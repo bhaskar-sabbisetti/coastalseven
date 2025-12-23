@@ -82,3 +82,30 @@ def generate_summary(text: str) -> dict:
         "model": MODEL_NAME
     }
 
+def call_llm(prompt: str) -> dict:
+    payload = {
+        "inputs": prompt,
+        "parameters": {
+            "max_length": 300
+        }
+    }
+
+    try:
+        response = requests.post(
+            API_URL,
+            headers=HEADERS,
+            json=payload,
+            timeout=90
+        )
+    except requests.exceptions.RequestException as e:
+        return {"success": False, "error": str(e)}
+
+    if response.status_code != 200:
+        return {"success": False, "error": response.text}
+
+    try:
+        text = response.json()[0]["summary_text"]
+    except Exception:
+        return {"success": False, "error": "Invalid LLM response"}
+
+    return {"success": True, "text": text}
