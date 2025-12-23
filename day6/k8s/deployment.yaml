@@ -11,25 +11,37 @@ spec:
     metadata:
       labels:
         app: coastal-api
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: "/metrics"
+        prometheus.io/port: "8000"
     spec:
       containers:
       - name: fastapi-container
-        # Use simple name, no username prefix
-        image: coastalseven-day6:latest 
-        # IMPORTANT: 'Never' forces K8s to look for the image locally 
-        imagePullPolicy: IfNotPresent 
+        image: coastalseven-day6:latest
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8000
         env:
-        - name: MAIL_FROM
+        # EMAIL SETTINGS (Extracted from your config.py)
+        - name: SMTP_USER
           value: "phanimahankali23@gmail.com"
-        - name: MAIL_USERNAME
-          value: "admin"
-        - name: MAIL_PASSWORD
-          value: "password"
-        - name: MAIL_PORT
-          value: "587"
-        - name: MAIL_SERVER
+        - name: SMTP_PASSWORD
+          value: "your_app_password"  # Update this to your real password
+        - name: EMAILS_FROM_EMAIL
+          value: "phanimahankali23@gmail.com"
+        - name: SMTP_HOST
           value: "smtp.gmail.com"
-        - name: MAIL_FROM_NAME
-          value: "Coastalseven Admin"
+        - name: SMTP_PORT
+          value: "465"
+        - name: EMAILS_FROM_NAME
+          value: "Portfolio Contact"
+        # DATABASE SETTINGS
+        - name: POSTGRES_SERVER
+          value: "db"
+        - name: POSTGRES_USER
+          value: "postgres"
+        - name: POSTGRES_PASSWORD
+          value: "Bhaskar_6281"
+        - name: POSTGRES_DB
+          value: "sepnoty_db"
