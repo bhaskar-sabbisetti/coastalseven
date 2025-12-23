@@ -46,13 +46,6 @@ export const Navbar = () => {
                         </button>
 
                         <div className="h-6 w-px bg-gray-200 mx-2"></div>
-
-                        <Link
-                            to="/login"
-                            className="bg-gray-900 text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-gray-800 transition-all hover:shadow-lg flex items-center gap-2"
-                        >
-                            Client Login
-                        </Link>
                     </div>
 
                     {/* Mobile menu button */}
@@ -80,14 +73,6 @@ export const Navbar = () => {
                                 {item}
                             </button>
                         ))}
-                        <div className="pt-4 px-4 pb-4 border-t border-gray-100 mt-2">
-                            <Link
-                                to="/login"
-                                className="block w-full text-center bg-blue-600 text-white px-4 py-3 rounded-lg text-base font-medium hover:bg-blue-700"
-                            >
-                                Access Sepnoty Platform
-                            </Link>
-                        </div>
                     </div>
                 </div>
             )}

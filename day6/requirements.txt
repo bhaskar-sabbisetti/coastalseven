@@ -30,3 +30,4 @@ httpx
 # Utilities
 email-validator
 fastapi-mail
+PyPDF2
