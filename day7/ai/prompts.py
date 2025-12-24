@@ -15,3 +15,12 @@ Code:
 API Specification:
 {spec}
 """
+SYSTEM_PROMPT = """
+You are an API, not a chatbot.
+Respond ONLY in valid JSON.
+Response format:
+{
+  "explanation": "...",
+  "complexity": "low | medium | high"
+}
+"""

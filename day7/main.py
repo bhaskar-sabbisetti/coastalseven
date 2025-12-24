@@ -1,8 +1,9 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-from ai.llm_client import generate_summary,call_llm
-from ai.prompts import EXPLAIN_CODE_PROMPT
-
+from ai.llm_client import generate_summary,call_llm,call_ai_model
+from ai.prompts import EXPLAIN_CODE_PROMPT,SYSTEM_PROMPT
+from typing import Literal
+import json
 app = FastAPI(
     title="AI Summarization API",
     description="FastAPI backend with Hugging Face LLM integration",
@@ -26,6 +27,12 @@ class SummarizeResponse(BaseModel):
     error: str | None
     provider: str
     model: str
+
+
+class AIExplainResponse(BaseModel):
+    explanation: str
+    complexity: Literal["low", "medium", "high"]
+
 
 @app.post("/ai/summarize", response_model=SummarizeResponse)
 def summarize_text(payload: SummarizeRequest):
@@ -60,3 +67,36 @@ def explain_code(payload: ExplainRequest):
         "provider": "huggingface",
         "model": "facebook/bart-large-cnn"
     }
+
+@app.post("/ai/summary", response_model=AIExplainResponse)
+def explain_topic(topic: str):
+
+    prompt = f"Explain the topic clearly: {topic}"
+
+    result = call_ai_model(prompt)
+
+    if not result["success"]:
+        raise HTTPException(status_code=500, detail=result["error"])
+
+    explanation_text = result["text"]
+
+    explanation_text = explanation_text.strip()
+
+    if not explanation_text:
+        raise HTTPException(
+            status_code=500,
+            detail="Empty response from AI model"
+        )
+    word_count = len(explanation_text.split())
+
+    if word_count < 60:
+        complexity = "low"
+    elif word_count < 150:
+        complexity = "medium"
+    else:
+        complexity = "high"
+
+    return AIExplainResponse(
+        explanation=explanation_text,
+        complexity=complexity
+    )
