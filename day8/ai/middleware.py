@@ -4,6 +4,8 @@ from ai.cache import get_cache_key, get_cached_response, set_cached_response
 from ai.rate_limit import is_rate_limited
 from ai.retry import retry
 from ai.logger import log_ai_call
+from ai.metrics import ai_requests_total, ai_latency_ms
+
 
 
 @retry(max_retries=3)

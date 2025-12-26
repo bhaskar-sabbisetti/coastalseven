@@ -2,11 +2,20 @@ from fastapi import FastAPI, Request, HTTPException
 from ai.middleware import ai_service
 from schemas.ai_response import AIExplainResponse
 from ai.router import router as router
+from ai.health import check_health
+from prometheus_client import generate_latest
+from fastapi.responses import PlainTextResponse
 
 app = FastAPI(title="AI Backend with Redis Middleware")
 app.include_router(router)
 
+@app.get("/metrics")
+def metrics():
+    return PlainTextResponse(generate_latest())
 
+@app.get("/health/ai")
+def health():
+    return check_health()
 @app.post("/ai/summary", response_model=AIExplainResponse)
 def explain_topic(topic: str, request: Request):
 
